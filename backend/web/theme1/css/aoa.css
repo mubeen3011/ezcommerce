@@ -1,0 +1,128 @@
+
+.paginate_button {
+    display: inline-table !important;
+}
+
+table > input,table >  select,table >  textarea {
+    /*width: auto !important;*/
+}
+
+/* Hiding the checkbox, but allowing it to be focused */
+.badgebox {
+    opacity: 0;
+}
+
+.badgebox + .badge {
+    /* Move the check mark away when unchecked */
+    text-indent: -999999px;
+    /* Makes the badge's width stay the same checked and unchecked */
+    width: 27px;
+}
+
+.badgebox:focus + .badge {
+    /* Set something to make the badge looks focused */
+    /* This really depends on the application, in my case it was: */
+
+    /* Adding a light border */
+    box-shadow: inset 0px 0px 5px;
+    /* Taking the difference out of the padding */
+}
+
+.badgebox:checked + .badge {
+    /* Move the check mark back when checked */
+    text-indent: 0;
+}
+
+tfoot th, tfoot th > input.form-control {
+    /*width: 100% !important;*/
+}
+tfoot input {
+    text-align: center !important;
+}
+
+tfoot {
+    display: table-header-group;
+}
+
+.table{
+    table-layout:auto !important;
+    width: 100% !important;
+    word-wrap: normal !important;
+}
+
+.table td,.table th {
+    text-align: center !important;
+    /*width: 40% !important;*/
+
+}
+
+div.dataTables_wrapper {
+    margin: 0 auto;
+}
+
+.numc {
+    text-align: center !important;
+}
+
+div.dt-buttons{
+    position: absolute !important;
+    float: left !important;
+    top: -79px !important;
+    right: 19px !important;
+}
+
+.stk-tbl .dt-buttons{
+    top: -100px !important;
+}
+
+.stock-exports,.stock-sync {
+    width: auto !important;
+    position: absolute !important;
+    top: -70px !important;
+    right: -86px !important;
+
+}
+
+.stock-sync {
+    right: -350px !important;
+}
+
+.dataTables_length {
+    width: auto !important;
+    position: absolute !important;
+    top: -80px !important;
+    right: 138px !important;
+}
+.stk-tbl .dataTables_length {
+    top: -100px !important;
+}
+
+.breadcrumb .active {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.subsidy-filter
+{
+    width: 130px;
+    position: absolute;
+    top: 19px;
+    right: 320px;
+}
+
+.only_alphanumric
+{
+    text-align: center !important;
+}
+
+#header-logo a {
+    width: 0px !important;
+}
+
+#page-sidebar {
+    margin-top: 17px !important;
+}
+
+.top-icon-bar {
+    margin: 5px 30px !important;
+}

@@ -1,0 +1,153 @@
+# Edit this file to introduce tasks to be run by cron.
+#
+# Each task to run has to be defined through a single line
+# indicating with different fields when the task will be run
+# and what command to run for the task
+#
+# To define the time you can provide concrete values for
+# minute (m), hour (h), day of month (dom), month (mon),
+# and day of week (dow) or use '*' in these fields (for 'any').#
+# Notice that tasks will be started based on the cron's system
+# daemon's notion of time and timezones.
+#
+# Output of the crontab jobs (including errors) is sent through
+# email to the user the crontab file belongs to (unless redirected).
+#
+# For example, you can run a backup of all your user accounts
+# at 5 a.m every week with:
+# 0 5 * * 1 tar -zcf /var/backups/home.tgz /home/
+#
+# For more information see the manual pages of crontab(5) and cron(8)
+#
+# m h  dom mon dow   command
+
+
+########################################
+#Kill process
+########################################
+*/30 * * * * sudo wget http://new-philips.ezcommerce.io/cron/kill-query >/dev/null 2>&1
+
+
+######################################
+#Fetch Product Information from Marketplaces to Product and channel product 12 PM
+######################################
+
+0 12 * * * sudo wget "http://new-philips.ezcommerce.io/api/call-channels-products?name=Lazada&marketplace=lazada" >/dev/null 2>&1
+0 12 * * * sudo wget "http://new-philips.ezcommerce.io/api/call-channels-products?name=Avent-Lazada&marketplace=lazada" >/dev/null 2>&1
+0 12 * * * sudo wget "http://new-philips.ezcommerce.io/api/call-channels-products?name=Shopee&marketplace=shopee" >/dev/null 2>&1
+
+
+###product table archive every month last days###
+0 0 30-31 * * sudo wget http://new-philips.ezcommerce.io/cron/product-archive > /dev/null 2>&1
+#every week tuesday
+0 0 * * 2 sudo wget http://new-philips.ezcommerce.io/cron/product-archive > /dev/null 2>&1
+
+
+######################################
+#Fetch Sales/Orders  Every 10 Minutes
+######################################
+*/10 * * * * sudo wget "http://new-philips.ezcommerce.io/cron/sales-fetch?channel=lazada&channel_name=Lazada&time_period=chunk" >/dev/null 2>&1
+*/10 * * * * sudo wget "http://new-philips.ezcommerce.io/cron/sales-fetch?channel=lazada&channel_name=Avent-Lazada&time_period=chunk" >/dev/null 2>&1
+*/10 * * * * sudo wget "http://new-philips.ezcommerce.io/cron/sales-fetch?channel=shopee&channel_name=Shopee&time_period=chunk" >/dev/null 2>&1
+
+
+######################################
+#Fetch Sales/Orders 11 PM Night Every night
+######################################
+0 23 * * * sudo wget "http://new-philips.ezcommerce.io/cron/sales-fetch?channel=lazada&channel_name=Lazada&time_period=day" > /dev/null 2>&1
+0 23 * * * sudo wget "http://new-philips.ezcommerce.io/cron/sales-fetch?channel=lazada&channel_name=Avent-Lazada&time_period=day" > /dev/null 2>&1
+0 23 * * * sudo wget "http://new-philips.ezcommerce.io/cron/sales-fetch?channel=shopee&channel_name=Shopee&time_period=day" > /dev/null 2>&1
+
+
+
+######################################
+# Update Stock - Every 10 Minutes
+######################################
+*/10 * * * * sudo wget "http://new-philips.ezcommerce.io/api/sync-stocks?shop-name=Lazada" > /dev/null 2>&1
+*/10 * * * * sudo wget "http://new-philips.ezcommerce.io/api/sync-stocks?shop-name=Avent-Lazada" > /dev/null 2>&1
+*/10 * * * * sudo wget "http://new-philips.ezcommerce.io/api/sync-stocks?shop-name=Shopee" > /dev/null 2>&1
+
+## philips specific cron jobs for gc stock update
+*/1 * * * * sudo wget "http://new-philips.ezcommerce.io/api/update-gc-stocks?shop_name=Lazada" > /dev/null 2>&1
+*/1 * * * * sudo wget "http://new-philips.ezcommerce.io/api/update-gc-stocks?shop_name=Shopee" > /dev/null 2>&1
+
+
+#######################################
+#Delete Logs Data every tuesday at 1 pm
+#######################################
+0 13 * * 2 sudo wget http://new-philips.ezcommerce.io/api/delete-logs-data >/dev/null 2>&1
+
+################################
+# Deal Run / End - Every Minute
+################################
+* * * * * sudo wget "http://new-philips.ezcommerce.io/cron/subsidy-price-update" > /dev/null 2>&1
+
+################################
+# Product-360 Cron jobs - Every Minute
+################################
+#* * * * * cd /var/www/ecom && php yii queue/run -v
+
+################################
+# get stocks from warehouse and dump into ezcommerce
+################################
+
+### Lazada FBL ###
+*/10 * * * * sudo wget "http://new-philips.ezcommerce.io/cron/warehouse-stock-sync?warehouse=lazada-fbl" > /dev/null 2>&1
+
+### istore isend ###
+*/10 * * * * sudo wget "http://new-philips.ezcommerce.io/cron/warehouse-stock-sync?warehouse=istoreisend" > /dev/null 2>&1
+
+
+### Update Out of Stocks Forcast in days for stock list sreen ###
+0 8 * * * sudo wget "http://new-philips.ezcommerce.io/cron/update-out-of-stock-forcast" > /dev/null 2>&1
+
+
+### Threshold update cron jobs ###
+# Below cron job is running for all active warehouses
+0 0 1 * * sudo "http://new-philips.ezcommerce.io/cron/update-threshold" > /dev/null 2>&1
+### Threshold update cron jobs ###
+
+
+### Po Recieved Qty ###
+0 18 * * * sudo wget "http://new-philips.ezcommerce.io/cron/fetch-po-recieved-qty" > /dev/null 2>&1
+### Po Recieved Qty ###
+
+###warehouse stock archive ###
+59 23 * * * sudo wget "http://new-philips.ezcommerce.io/cron/stock-archive" > /dev/null 2>&1
+
+
+## monthly sale of every channel for channel_target table every year once(2nd january) ##
+0 0 2 1 * sudo wget "http://new-philips.ezcommerce.io/cron/channel-monthly-target-calulcation" > /dev/null 2>&1
+
+## updating selling status of product (marketplace wise as well as overall) every month second date ##
+0 0 2 * * sudo wget "http://new-philips.ezcommerce.io/cron/update-selling-status" > /dev/null 2>&1
+
+## Update Tracking Info of orders To marketplace ##
+*/15 * * * * sudo wget "http://new-philips.ezcommerce.io/cron/courier-tracking-update" > /dev/null 2>&1
+
+## Run finance report jobs ###
+
+0 7 * * * sudo wget http://new-philips.ezcommerce.io/cron/insert-trx > /dev/null 2>&1 #Get yesterday finance report and dump into a table
+0 8 * * * sudo wget http://new-philips.ezcommerce.io/cron/lazada-finance > /dev/null 2>&1 # Process the finance_log table and insert it in final_table
+
+## Crawler ##
+
+0 11 * * * sudo wget http://new-philips.ezcommerce.io/crawl/run?channel=22 > /dev/null 2>&1 #Lazada Crawler
+0 11 * * * sudo wget http://new-philips.ezcommerce.io/crawl/run?channel=24 > /dev/null 2>&1 #Shopee Crawler
+
+## Calculate Pricing ##
+*/10 * * * * sudo wget http://new-philips.ezcommerce.io/cron/calculate-pricing > /dev/null 2>&1
+
+## Channels Products Archive ##
+0 18 * * * sudo wget http://new-philips.ezcommerce.io/cron/channels-products-archive > /dev/null 2>&1
+
+################################
+# Send email of customer delievered orders for marketing
+################################
+#0 10 * * * sudo wget http://new-philips.ezcommerce.io/cron/send-customer-data >/dev/null 2>&1
+
+################################
+# Create the claims into the Claims_Items table / Shopee,Lazada,11Street
+################################
+0 6 * * * sudo wget "http://new-philips.ezcommerce.io/cron/log-claims?marketplace=lazada" >/dev/null 2>&1
+0 7 * * * sudo wget "http://new-philips.ezcommerce.io/cron/log-claims?channel=shopee" >/dev/null 2>&1

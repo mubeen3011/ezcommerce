@@ -1,0 +1,215 @@
+.breadcrumb{
+    float: right;
+}
+.table-heading{
+    font-weight: bold;
+}
+.table thead th, .table th {
+    font-weight: bold !important;
+    font-size: 12px !important;
+}
+.custom-css-txt{
+    width:75px;
+}
+.label:empty{
+    display: none;
+}
+/*.gridData tr :last-child{
+    padding:5px;
+}*/
+.control-label{
+    padding: 10px;
+}
+.content-box-wrapper .row .col-md-6{
+    max-width: 50%;
+}
+.content-box-wrapper .row{
+    margin-left:0px;
+}
+.card-body h3{
+    margin-bottom: 10px;
+}
+.margin-special{
+    margin-bottom: 0px !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    color: white;
+    border: 1px solid lightgrey !important;
+    background-color: lightgrey !important;
+}
+.breadcrumb{
+    background-color: white;
+    padding: 1px;
+}
+.filters-hide{
+    display: none !important;
+}
+.filters-show{
+    display: block !important;
+}
+.margin-right-filters-section{
+    margin-right:15px;
+}
+.page-titles{
+    padding-bottom:0px !important;
+}
+.last-synchronize{
+    font-size:10px;
+}
+
+.dl-more-card{
+    height: 220px !important;
+}
+.control-label {
+    padding: 0px;
+}
+.tablesaw-columntoggle-popup{
+    height:250px;
+    overflow: auto;
+}
+.modal-header{
+    background-color: whitesmoke;
+}
+.inputs-margin{
+    margin-top:15px;
+}
+/*.min-th-width{
+    min-width : 0px;
+}*/
+.sort-arrows{
+    position: absolute;
+    right: .5em;
+    display: inline-block;
+    width: 7px;
+    height: 10px;
+    font-family: "FontAwesome";
+    font-size: inherit;
+    font-style: normal;
+    font-weight: 300;
+    font-variant: normal;
+    font-size-adjust: none;
+    font-stretch: normal;
+    line-height: 1;
+    content: "\0020";
+    -webkit-font-feature-settings: normal;
+    -moz-font-feature-settings: normal;
+    font-feature-settings: normal;
+    -webkit-font-kerning: auto;
+    -moz-font-kerning: auto;
+    font-kerning: auto;
+    -webkit-font-language-override: normal;
+    -moz-font-language-override: normal;
+    font-language-override: normal;
+    font-synthesis: weight style;
+    text-rendering: auto;
+}
+.iffyTip {
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+.wd100 {
+    width:100px;
+}
+
+.form-group .select2-container--default .select2-selection--multiple {
+    border: 1px solid #ced4da !important;
+    min-height: 38px;
+}
+.multi-select-items  {
+    width: 100% !important;
+}
+.ms-choice{
+    height:36px;
+}
+.update-graph-clss{
+    width:100%;
+}
+.clear-filters{
+    background-color: #f62d51 !important;
+    border: 1px solid #f62d51 !important;
+}
+.tooltip-content4{
+    position: fixed !important;
+}
+.notification {
+    background-color: #555;
+    color: white;
+    text-decoration: none;
+    padding: 15px 26px;
+    position: relative;
+    display: inline-block;
+    border-radius: 2px;
+}
+
+.notification:hover {
+    background: red;
+}
+
+.notification .badge {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    padding: 5px 10px;
+    border-radius: 50%;
+    background-color: red;
+    color: white;
+}
+
+#backToTheTut{
+    background-color: #0f8edd;
+    color: white;
+    border: 1px solid white;
+    height: 60px;
+    right: 5px;
+    padding: 16px 16px 0 13px;
+    position: fixed;
+    top: 200px;
+    width: 65px;
+    z-index: 200;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+}
+#backToTheTutBundle{
+    background-color: #0f8edd;
+    color: white;
+    border: 1px solid white;
+    height: 60px;
+    right: 5px;
+    padding: 16px 16px 0 13px;
+    position: fixed;
+    top: 280px;
+    width: 65px;
+    z-index: 200;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+}
+/*********  for table responsive horizontal scroll bar , hidden/
+/* width */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px #FFFFFF;
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #FFFFFF;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: transparent;
+}
+.deal-td-width{
+    width:70px !important;
+}
+
+/*******************************/

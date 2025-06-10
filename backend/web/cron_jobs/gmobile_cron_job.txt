@@ -1,0 +1,111 @@
+# Edit this file to introduce tasks to be run by cron.
+#
+# Each task to run has to be defined through a single line
+# indicating with different fields when the task will be run
+# and what command to run for the task
+#
+# To define the time you can provide concrete values for
+# minute (m), hour (h), day of month (dom), month (mon),
+# and day of week (dow) or use '*' in these fields (for 'any').#
+# Notice that tasks will be started based on the cron's system
+# daemon's notion of time and timezones.
+#
+# Output of the crontab jobs (including errors) is sent through
+# email to the user the crontab file belongs to (unless redirected).
+#
+# For example, you can run a backup of all your user accounts
+# at 5 a.m every week with:
+# 0 5 * * 1 tar -zcf /var/backups/home.tgz /home/
+#
+# For more information see the manual pages of crontab(5) and cron(8)
+#
+# m h  dom mon dow   command
+
+###############################################################################################
+########################### Start Jobs For Gmobile  ##########################################
+###############################################################################################
+
+######################################
+#Fetch Product Information from Marketplaces to Product and channel product 12 PM
+######################################
+0 12 * * * sudo wget "https://globalmobiles.ezcommerce.io/api/call-channels-products?shop-prefix=EBAY-GM" >/dev/null 2>&1
+15 12 * * * sudo wget "https://globalmobiles.ezcommerce.io/api/call-channels-products?shop-prefix=BKM-GM" >/dev/null 2>&1
+30 12 * * * sudo wget "https://globalmobiles.ezcommerce.io/api/call-channels-products?shop-prefix=AMZ-SPA-GM" >/dev/null 2>&1
+40 12 * * * sudo wget "https://globalmobiles.ezcommerce.io/api/call-channels-products?shop-prefix=PST-GM" >/dev/null 2>&1
+50 12 * * * sudo wget "https://globalmobiles.ezcommerce.io/api/call-channels-products?shop-prefix=WMT-GM" >/dev/null 2>&1
+
+
+######################################
+#Fetch Sales/Orders  Every 10/20 or 30 Minutes
+######################################
+*/15 * * * * sudo wget "https://globalmobiles.ezcommerce.io/cron/sales-fetch?shop-prefix=EBAY-GM&time_period=chunk" >/dev/null 2>&1
+*/15 * * * * sudo wget "https://globalmobiles.ezcommerce.io/cron/sales-fetch?shop-prefix=BKM-GM&time_period=chunk" >/dev/null 2>&1
+*/15 * * * * sudo wget "https://globalmobiles.ezcommerce.io/cron/sales-fetch?shop-prefix=PST-GM&time_period=chunk" >/dev/null 2>&1
+*/35 * * * * sudo wget "https://globalmobiles.ezcommerce.io/cron/sales-fetch?shop-prefix=AMZ-SPA-GM&time_period=chunk" >/dev/null 2>&1
+*/20 * * * * sudo wget "https://globalmobiles.ezcommerce.io/cron/sales-fetch?shop-prefix=WMT-GM&time_period=chunk" >/dev/null 2>&1
+######################################
+#Fetch Sales/Orders 11 PM Night Every night
+######################################
+0 23 * * * sudo wget "https://globalmobiles.ezcommerce.io/cron/sales-fetch?shop-prefix=EBAY-GM&time_period=day" > /dev/null 2>&1
+15 23 * * * sudo wget "https://globalmobiles.ezcommerce.io/cron/sales-fetch?channel=shop-prefix=BKM-GM&time_period=day" > /dev/null 2>&1
+25 23 * * * sudo wget "https://globalmobiles.ezcommerce.io/cron/sales-fetch?shop-prefix=PST-GM&time_period=day" > /dev/null 2>&1
+30 23 * * * sudo wget "https://globalmobiles.ezcommerce.io/cron/sales-fetch?shop-prefix=WMT-GM&time_period=day" > /dev/null 2>&1
+######################################
+# Update Stock -  ebay 30 minites
+######################################
+*/15 * * * * sudo wget "https://globalmobiles.ezcommerce.io/api/sync-stocks?shop-prefix=EBAY-GM&updated_before_minutes=20" > /dev/null 2>&1
+#*/15 * * * * sudo wget "https://globalmobiles.ezcommerce.io/api/sync-stocks?shop-prefix=BKM-GM" > /dev/null 2>&1
+#*/15 * * * * sudo wget "https://globalmobiles.ezcommerce.io/api/sync-stocks?shop-prefix=PST-GM" > /dev/null 2>&1
+*/30 * * * * sudo wget "https://globalmobiles.ezcommerce.io/api/sync-stocks?shop-prefix=AMZ-SPA-GM" > /dev/null 2>&1
+*/30 * * * * sudo wget "https://globalmobiles.ezcommerce.io/api/sync-stocks?shop-prefix=WMT-GM" > /dev/null 2>&1
+################################
+# get stocks from warehouse and dump into ezcommerce
+################################
+### Amazon FBA ###
+45 1 * * * sudo wget "https://globalmobiles.ezcommerce.io/cron/warehouse-stock-sync?warehouse=amazon-fba&name=fba" > /dev/null 2>&1
+######################################
+# Deal Run / End - Every Minute
+######################################
+#* * * * * sudo wget "https://globalmobiles.ezcommerce.io/cron/subsidy-price-update" > /dev/null 2>&1
+######################################
+### Convert to presta Module sheet
+######################################
+0 /1 * * * sudo wget "https://globalmobiles.ezcommerce.io/cron/global-mobile-csv-swapper" > /dev/null 2>&1
+
+#####################################
+######################################
+### Threshold update cron jobs ###
+######################################
+# Below cron job is running for all active warehouses
+#0 0 1 * * sudo "https://globalmobiles.ezcommerce.io/cron/update-threshold" > /dev/null 2>&1
+### Threshold update cron jobs ###
+
+###############################################################
+# Archive Data Jobs
+###############################################################
+# warehouse stock archive
+###################################
+59 23 * * * sudo wget "https://globalmobiles.ezcommerce.io/cron/stock-archive" > /dev/null 2>&1
+
+###################################
+# product table archive every month last days
+###################################
+0 0 30-31 * * sudo wget "https://globalmobiles.ezcommerce.io/cron/product-archive" > /dev/null 2>&1
+###################################
+# product table archive every week tuesday
+###################################
+0 0 * * 2 sudo wget "https://globalmobiles.ezcommerce.io/cron/product-archive" > /dev/null 2>&1
+###################################
+## Channels Products Archive ##
+###################################
+#0 18 * * * sudo wget "https://globalmobiles.ezcommerce.io/cron/channels-products-archive" > /dev/null 2>&1
+###################################
+## get missing images of products ##
+###################################
+#3 */1 * * * sudo wget "https://globalmobiles.ezcommerce.io/cron/get-amazon-missing-images?prefix=AMZ-SPA-GM" > /dev/null 2>&1
+#######################################
+# Delete Logs Data every tuesday at 1 pm
+#######################################
+0 13 * * 2 sudo wget "https://globalmobiles.ezcommerce.io/api/delete-logs-data" >/dev/null 2>&1
+
+###############################################################

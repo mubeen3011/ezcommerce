@@ -1,0 +1,172 @@
+# Edit this file to introduce tasks to be run by cron.
+#
+# Each task to run has to be defined through a single line
+# indicating with different fields when the task will be run
+# and what command to run for the task
+#
+# To define the time you can provide concrete values for
+# minute (m), hour (h), day of month (dom), month (mon),
+# and day of week (dow) or use '*' in these fields (for 'any').#
+# Notice that tasks will be started based on the cron's system
+# daemon's notion of time and timezones.
+#
+# Output of the crontab jobs (including errors) is sent through
+# email to the user the crontab file belongs to (unless redirected).
+#
+# For example, you can run a backup of all your user accounts
+# at 5 a.m every week with:
+# 0 5 * * 1 tar -zcf /var/backups/home.tgz /home/
+#
+# For more information see the manual pages of crontab(5) and cron(8)
+#
+# m h  dom mon dow   command
+
+###############################################################################################
+########################### Start Jobs For US Boxing Server ###################################
+###############################################################################################
+
+######################################
+#Fetch Product Information from Marketplaces to Product and channel product 12 PM
+######################################
+0 12 * * * sudo wget "https://usboxing.ezcommerce.io/api/call-channels-products?shop-prefix=PST-USBOX" >/dev/null 2>&1
+0 12 * * * sudo wget "https://usboxing.ezcommerce.io/api/call-channels-products?shop-prefix=ebay-usbox" >/dev/null 2>&1
+0 12 * * * sudo wget "https://usboxing.ezcommerce.io/api/call-channels-products?shop-prefix=USBAMZ-USB" >/dev/null 2>&1
+0 12 * * * sudo wget "https://usboxing.ezcommerce.io/api/call-channels-products?shop-prefix=WMT-USB" >/dev/null 2>&1
+0 12 * * * sudo wget "https://usboxing.ezcommerce.io/api/call-channels-products?shop-prefix=UFT-PREST" >/dev/null 2>&1
+
+###product table archive every month last days###
+0 0 30-31 * * sudo wget "https://usboxing.ezcommerce.io/cron/product-archive" > /dev/null 2>&1
+#every week tuesday
+0 0 * * 2 sudo wget "https://usboxing.ezcommerce.io/cron/product-archive" > /dev/null 2>&1
+
+######################################
+#Fetch Sales/Orders  Every 10 Minutes
+######################################
+*/10 * * * * sudo wget "https://usboxing.ezcommerce.io/cron/sales-fetch?shop-prefix=PST-USBOX&time_period=chunk" >/dev/null 2>&1
+*/30 * * * * sudo wget "https://usboxing.ezcommerce.io/cron/sales-fetch?shop-prefix=ebay-usbox&time_period=chunk" >/dev/null 2>&1
+*/20 * * * * sudo wget "https://usboxing.ezcommerce.io/cron/sales-fetch?shop-prefix=USBAMZ-USB&time_period=chunk" >/dev/null 2>&1
+*/20 * * * * sudo wget "https://usboxing.ezcommerce.io/cron/sales-fetch?shop-prefix=WMT-USB&time_period=chunk" >/dev/null 2>&1
+*/10 * * * * sudo wget "https://usboxing.ezcommerce.io/cron/sales-fetch?shop-prefix=UFT-PREST&time_period=chunk" >/dev/null 2>&1
+
+######################################
+#Fetch Sales/Orders 11 PM Night Every night
+######################################
+0 23 * * * sudo wget "https://usboxing.ezcommerce.io/cron/sales-fetch?shop-prefix=PST-USBOX&time_period=day" > /dev/null 2>&1
+0 23 * * * sudo wget "https://usboxing.ezcommerce.io/cron/sales-fetch?shop-prefix=ebay-usbox&time_period=day" > /dev/null 2>&1
+0 23 * * * sudo wget "https://usboxing.ezcommerce.io/cron/sales-fetch?shop-prefix=USBAMZ-USB&time_period=day" > /dev/null 2>&1
+0 23 * * * sudo wget "https://usboxing.ezcommerce.io/cron/sales-fetch?shop-prefix=WMT-USB&time_period=day" > /dev/null 2>&1
+0 23 * * * sudo wget "https://usboxing.ezcommerce.io/cron/sales-fetch?shop-prefix=UFT-PREST&time_period=day" > /dev/null 2>&1
+
+######################################
+# Update Stock - Every 10 Minutes for ebay 30 minites,walmart 15 mins
+######################################
+*/10 * * * * sudo wget "https://usboxing.ezcommerce.io/api/sync-stocks?shop-prefix=PST-USBOX" > /dev/null 2>&1
+*/10 * * * * sudo wget "https://usboxing.ezcommerce.io/api/sync-stocks?shop-prefix=UFT-PREST" > /dev/null 2>&1
+*/30 * * * * sudo wget "https://usboxing.ezcommerce.io/api/sync-stocks?shop-prefix=ebay-usbox&updated_before_minutes=35" > /dev/null 2>&1
+*/10 * * * * sudo wget "https://usboxing.ezcommerce.io/api/sync-stocks?shop-prefix=USBAMZ-USB" > /dev/null 2>&1
+*/15 * * * * sudo wget "https://usboxing.ezcommerce.io/api/sync-stocks?shop-prefix=WMT-USB" > /dev/null 2>&1
+
+
+######################################
+# Update Prices - Every 12 PM Afternoon
+######################################
+# 0 12 * * * sudo wget "https://usboxing.ezcommerce.io/api/sync-prices?shop-prefix=PST-USBOX" > /dev/null 2>&1
+# 0 12 * * * sudo wget "https://usboxing.ezcommerce.io/api/sync-prices?shop-prefix=ebay-usbox" > /dev/null 2>&1
+# 0 12 * * * sudo wget "https://usboxing.ezcommerce.io/api/sync-prices?shop-prefix=USBAMZ-USB" > /dev/null 2>&1
+# 0 12 * * * sudo wget "https://usboxing.ezcommerce.io/api/sync-prices?shop-prefix=WMT-USB" > /dev/null 2>&1
+
+#######################################
+#Delete Logs Data every tuesday at 1 pm
+#######################################
+0 13 * * 2 sudo wget https://usboxing.ezcommerce.io/api/delete-logs-data >/dev/null 2>&1
+
+################################
+# Deal Run / End - Every Minute
+################################
+* * * * * sudo wget "https://usboxing.ezcommerce.io/cron/subsidy-price-update" > /dev/null 2>&1
+
+################################
+# Product-360 Cron jobs - Every Minute
+################################
+#* * * * * cd /var/www/ecom && php yii queue/run -v
+
+################################
+
+######################################################################
+#########START Warehouse Related Cron Jobs ###########################
+######################################################################
+################################
+# create products to warehouse at 2 pm after product fetch run
+################################
+#0 14 * * * sudo wget "https://usboxing.ezcommerce.io/cron/sync-warehouse-products?prefix=RDF" > /dev/null 2>&1
+#0 14 * * * sudo wget "https://usboxing.ezcommerce.io/cron/sync-warehouse-products?prefix=QUI6" > /dev/null 2>&1
+#0 14 * * * sudo wget "https://usboxing.ezcommerce.io/cron/sync-warehouse-products?name=FBA&warehouse=skuvault" > /dev/null 2>&1
+
+################################
+# get stocks from warehouse and dump into ezcommerce
+################################
+
+###SKU Vault FBA and RedFort ###
+#*/10 * * * * sudo wget "https://usboxing.ezcommerce.io/cron/warehouse-stock-sync?warehouse=skuvault" > /dev/null 2>&1
+### Lazada FBL ###
+#*/10 * * * * sudo wget "https://usboxing.ezcommerce.io/cron/warehouse-stock-sync?warehouse=lazada-fbl" > /dev/null 2>&1
+### istore isend ###
+#*/10 * * * * sudo wget "https://usboxing.ezcommerce.io/cron/warehouse-stock-sync?warehouse=istoreisend" > /dev/null 2>&1
+### Amazon FBA ###
+*/10 * * * * sudo wget "https://usboxing.ezcommerce.io/cron/warehouse-stock-sync?warehouse=amazon-fba" > /dev/null 2>&1
+### quickbook usboxing###
+*/20 * * * * sudo wget "https://usboxing.ezcommerce.io/cron/warehouse-stock-sync?prefix=QUI6" > /dev/null 2>&1
+### quickbook afs ###
+#*/21 * * * * sudo wget "https://usboxing.ezcommerce.io/cron/warehouse-stock-sync?prefix=QUI7" > /dev/null 2>&1
+### quickbook aama ###
+#*/22 * * * * sudo wget "https://usboxing.ezcommerce.io/cron/warehouse-stock-sync?prefix=QUI8" > /dev/null 2>&1
+### SpiritCombat ###
+#0 */3 * * * sudo wget "https://usboxing.ezcommerce.io/cron/fetch-spirit-combat-stocks" > /dev/null 2>&1
+
+### Update Out of Stocks Forcast in days for stock list sreen ###
+0 8 * * * sudo wget "https://usboxing.ezcommerce.io/cron/update-out-of-stock-forcast" > /dev/null 2>&1
+
+###if you want to update amazon fba stock to Ezcom and sku vault###
+#*/10 * * * * sudo wget "https://usboxing.ezcommerce.io/cron/get-marketplace-stock?channel-name=usboxingamazon&destination-storage-warehouse=fba&warehouse-type=skuvault&update-live-warehouse-stock"
+
+###order sync from ezcom to skuvault ###
+#*/15 * * * * sudo wget "https://usboxing.ezcommerce.io/cron/sync-sales-to-skuvault?time_period=chunk" > /dev/null 2>&1
+#0 9 * * * sudo wget "https://usboxing.ezcommerce.io/cron/sync-sales-to-skuvault?time_period=day" > /dev/null 2>&1
+
+###order sync from ezcom to quickbook ###
+*/30 * * * * sudo wget "https://usboxing.ezcommerce.io/cron/sync-sales-to-warehouse?prefix=QUI6&time_period_in_minutes=35" > /dev/null 2>&1
+0 23 * * * sudo wget "https://usboxing.ezcommerce.io/cron/sync-sales-to-warehouse?prefix=QUI6&time_period_in_minutes=1500" > /dev/null 2>&1
+
+
+
+### Threshold update cron jobs ###
+# Below cron job is running for all active warehouses
+0 0 1 * * sudo "http://usboxing.ezcommerce.io/cron/update-threshold" > /dev/null 2>&1
+### Threshold update cron jobs ###
+
+### Po Recieved Qty ###
+0 18 * * * sudo wget "http://usboxing.ezcommerce.io/cron/fetch-po-recieved-qty" > /dev/null 2>&1
+### Po Recieved Qty ###
+
+###warehouse stock archive ###
+59 23 * * * sudo wget "http://usboxing.ezcommerce.io/cron/stock-archive" > /dev/null 2>&1
+
+######################################################################
+#########END Warehouse Related Cron Jobs #############################
+######################################################################
+
+## monthly sale of every channel for channel_target table every year once(2nd january) ##
+0 0 2 1 * sudo wget "http://usboxing.ezcommerce.io/cron/channel-monthly-target-calulcation" > /dev/null 2>&1
+
+## updating selling status of product (marketplace wise as well as overall) every month second date ##
+0 0 2 * * sudo wget "http://usboxing.ezcommerce.io/cron/update-selling-status" > /dev/null 2>&1
+
+### Third party order push jobs ###
+#0 * * * * sudo wget "http://usboxing.ezcommerce.io/cron/push-orders-to-third-party-platform" > /dev/null 2>&1
+#0 * * * * sudo wget "http://usboxing.ezcommerce.io/cron/get-third-party-order-status" > /dev/null 2>&1
+#0 */6 * * * sudo wget "http://usboxing.ezcommerce.io/cron/send-email-third-party-unpushed-orders-log" > /dev/null 2>&1
+
+
+###############################################################################################
+########################### END Jobs For US Boxing Server #####################################
+###############################################################################################

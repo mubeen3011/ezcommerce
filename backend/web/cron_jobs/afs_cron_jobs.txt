@@ -1,0 +1,65 @@
+# Edit this file to introduce tasks to be run by cron.
+#
+# Each task to run has to be defined through a single line
+# indicating with different fields when the task will be run
+# and what command to run for the task
+#
+# To define the time you can provide concrete values for
+# minute (m), hour (h), day of month (dom), month (mon),
+# and day of week (dow) or use '*' in these fields (for 'any').#
+# Notice that tasks will be started based on the cron's system
+# daemon's notion of time and timezones.
+#
+# Output of the crontab jobs (including errors) is sent through
+# email to the user the crontab file belongs to (unless redirected).
+#
+# For example, you can run a backup of all your user accounts
+# at 5 a.m every week with:
+# 0 5 * * 1 tar -zcf /var/backups/home.tgz /home/
+#
+# For more information see the manual pages of crontab(5) and cron(8)
+#
+# m h  dom mon dow   command
+
+###############################################################################################
+########################### Start Jobs For AFS gear Server ###################################
+###############################################################################################
+
+######################################
+#Fetch Product Information from Marketplaces to Product and channel product 12 PM
+######################################
+0 12 * * * sudo wget "https://afsgear.ezcommerce.io/api/call-channels-products?name=afsgear&marketplace=prestashop" >/dev/null 2>&1
+
+######################################
+#Fetch Sales/Orders  Every 10 Minutes
+######################################
+*/10 * * * * sudo wget "https://afsgear.ezcommerce.io/cron/sales-fetch?channel=prestashop&channel_name=afsgear&time_period=chunk" >/dev/null 2>&1
+
+######################################
+#Fetch Sales/Orders 11 PM Night Every night
+######################################
+0 23 * * * sudo wget "https://afsgear.ezcommerce.io/cron/sales-fetch?channel=prestashop&channel_name=afsgear&time_period=day" > /dev/null 2>&1
+
+######################################
+# Update Stock - Every 10 Minutes
+######################################
+#*/20 * * * * sudo wget "https://afsgear.ezcommerce.io/api/sync-stocks?shop-name=afsgear" > /dev/null 2>&1
+
+######################################
+# Update tracking number and status on marketplace - Every 10 minites
+######################################
+*/13 * * * * sudo wget "https://afsgear.ezcommerce.io/cron/update-tracking-to-marketplace?marketplace=prestashop" > /dev/null 2>&1
+
+######################################
+# Update tracking status of courier - Every 8 hours
+######################################
+0 */8 * * * sudo wget "https://afsgear.ezcommerce.io/cron/track-update-shippings" > /dev/null 2>&1
+
+#######################################
+# Delete Logs Data every tuesday at 1 pm
+#######################################
+0 13 * * 2 sudo wget "https://afsgear.ezcommerce.io/api/delete-logs-data" >/dev/null 2>&1
+
+###############################################################################################
+########################### END Jobs For afs Server #####################################
+###############################################################################################

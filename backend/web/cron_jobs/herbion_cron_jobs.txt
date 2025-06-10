@@ -1,0 +1,115 @@
+# Edit this file to introduce tasks to be run by cron.
+#
+# Each task to run has to be defined through a single line
+# indicating with different fields when the task will be run
+# and what command to run for the task
+#
+# To define the time you can provide concrete values for
+# minute (m), hour (h), day of month (dom), month (mon),
+# and day of week (dow) or use '*' in these fields (for 'any').#
+# Notice that tasks will be started based on the cron's system
+# daemon's notion of time and timezones.
+#
+# Output of the crontab jobs (including errors) is sent through
+# email to the user the crontab file belongs to (unless redirected).
+#
+# For example, you can run a backup of all your user accounts
+# at 5 a.m every week with:
+# 0 5 * * 1 tar -zcf /var/backups/home.tgz /home/
+#
+# For more information see the manual pages of crontab(5) and cron(8)
+#
+# m h  dom mon dow   command
+
+###############################################################################################
+########################### Start Jobs For Herbion###################################
+###############################################################################################
+
+######################################
+#Fetch Product Information from Marketplaces to Product and channel product 12 PM
+######################################
+0 12 * * * sudo wget "https://herbion.ezcommerce.io/api/call-channels-products?shop-prefix=BLP-LZD" >/dev/null 2>&1
+0 12 * * * sudo wget "https://herbion.ezcommerce.io/api/call-channels-products?shop-prefix=BLP-SHP" >/dev/null 2>&1
+
+######################################
+#Fetch Sales/Orders  Every 30 Minutes
+######################################
+*/30 * * * * sudo wget "https://herbion.ezcommerce.io/cron/sales-fetch?shop-prefix=BLP-LZD&time_period=chunk" >/dev/null 2>&1
+*/30 * * * * sudo wget "https://herbion.ezcommerce.io/cron/sales-fetch?shop-prefix=BLP-SHP&time_period=chunk" >/dev/null 2>&1
+
+######################################
+#Fetch Sales/Orders 11 PM Night Every night
+######################################
+0 23 * * * sudo wget "https://herbion.ezcommerce.io/cron/sales-fetch?shop-prefix=BLP-LZD&time_period=day" > /dev/null 2>&1
+0 23 * * * sudo wget "https://herbion.ezcommerce.io/cron/sales-fetch?shop-prefix=BLP-SHP&time_period=day" > /dev/null 2>&1
+
+######################################
+# Update Stock   - Every 10 minutes
+######################################
+#*/10 * * * * sudo wget "https://herbion.ezcommerce.io/api/sync-stocks?shop-prefix=BLP-LZD" > /dev/null 2>&1
+#*/10 * * * * sudo wget "https://herbion.ezcommerce.io/api/sync-stocks?shop-prefix=BLP-SHP" > /dev/null 2>&1
+
+#######################################
+#Delete Logs Data every tuesday at 1 pm
+#######################################
+0 13 * * 2 sudo wget https://herbion.ezcommerce.io/api/delete-logs-data >/dev/null 2>&1
+
+######################################
+# Deal Run / End - Every Minute
+######################################
+* * * * * sudo wget "https://herbion.ezcommerce.io/cron/subsidy-price-update" > /dev/null 2>&1
+
+################################
+# get stocks from warehouse and dump into ezcommerce
+################################
+
+### Lazada FBL ###
+*/10 * * * * sudo wget "https://herbion.ezcommerce.io/cron/warehouse-stock-sync?warehouse=lazada-fbl" > /dev/null 2>&1
+
+### istore isend ###
+*/10 * * * * sudo wget "https://herbion.ezcommerce.io/cron/warehouse-stock-sync?warehouse=istoreisend" > /dev/null 2>&1
+
+
+### Update Out of Stocks Forcast in days for stock list sreen ###
+0 8 * * * sudo wget "https://herbion.ezcommerce.io/cron/update-out-of-stock-forcast" > /dev/null 2>&1
+
+
+### Threshold update cron jobs ###
+# Below cron job is running for all active warehouses
+0 0 1 * * sudo "https://herbion.ezcommerce.io/cron/update-threshold" > /dev/null 2>&1
+### Threshold update cron jobs ###
+
+
+### Po Recieved Qty ###
+0 18 * * * sudo wget "https://herbion.ezcommerce.io/cron/fetch-po-recieved-qty" > /dev/null 2>&1
+### Po Recieved Qty ###
+
+
+###############################################################
+# Archive Data Jobs
+###############################################################
+# warehouse stock archive
+###################################
+59 23 * * * sudo wget "https://herbion.ezcommerce.io/cron/stock-archive" > /dev/null 2>&1
+
+###################################
+# product table archive every month last days
+###################################
+0 0 30-31 * * sudo wget "https://herbion.ezcommerce.io/cron/product-archive" > /dev/null 2>&1
+###################################
+# product table archive every week tuesday
+###################################
+0 0 * * 2 sudo wget "https://herbion.ezcommerce.io/cron/product-archive" > /dev/null 2>&1
+###################################
+## Channels Products Archive ##
+###################################
+#0 18 * * * sudo wget https://herbion.ezcommerce.io/cron/channels-products-archive > /dev/null 2>&1
+
+#######################################
+# Delete Logs Data every tuesday at 1 pm
+#######################################
+#0 13 * * 2 sudo wget "https://herbion.ezcommerce.io/api/delete-logs-data" >/dev/null 2>&1
+
+###############################################################################################
+########################### END Jobs For Herbion###################################
+###############################################################################################
